@@ -43,6 +43,7 @@ kFreq mtsesp_notetofrequency p4, ichn
 ```
 $ git clone https://github.com/narenratan/csound_tuning.git
 $ cd csound_tuning
+$ git submodule update --init --recursive
 $ cmake -B build
 $ cmake --build build
 ```
