@@ -1,0 +1,6 @@
+[submodule "src/libs/tuning-library"]
+	path = src/libs/tuning-library
+	url = https://github.com/surge-synthesizer/tuning-library.git
+[submodule "src/libs/MTS-ESP"]
+	path = src/libs/MTS-ESP
+	url = https://github.com/ODDSound/MTS-ESP.git
