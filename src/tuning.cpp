@@ -62,7 +62,9 @@ int mtsesp_notetofrequency(CSOUND *csound, MTSESP_NOTETOFREQUENCY *p)
     return OK;
 }
 
-static OENTRY localops[] = {
+#define N_OPS 3
+
+static OENTRY localops[N_OPS] = {
     {"scalatuning", sizeof(SCALATUNING), 0, 1, "i[]", "SS", (SUBR)scalatuning, NULL},
     {"mtsesp_notetofrequency", sizeof(MTSESP_NOTETOFREQUENCY), 0, 1, "i", "io",
      (SUBR)mtsesp_notetofrequency, NULL},
@@ -72,6 +74,7 @@ static OENTRY localops[] = {
 
 PUBLIC int csoundModuleCreate(CSOUND *csound)
 {
+    fprintf(stderr, "csoundModuleCreate\n");
     int err = csound->CreateGlobalVariable(csound, MTSESP_CLIENT_VARNAME, sizeof(MTSClient *));
     if (err != 0)
     {
@@ -87,12 +90,14 @@ PUBLIC int csoundModuleCreate(CSOUND *csound)
 PUBLIC int csoundModuleInit(CSOUND *csound)
 {
     int status = 0;
-    for (OENTRY *oentry = &localops[0]; oentry->opname; oentry++)
+    OENTRY *oentry = &localops[0];
+    for(int i = 0; i < N_OPS; i++)
     {
         status |= csound->AppendOpcode(
             csound, oentry->opname, oentry->dsblksiz, oentry->flags, oentry->thread,
             oentry->outypes, oentry->intypes, (int (*)(CSOUND *, void *))oentry->iopadr,
             (int (*)(CSOUND *, void *))oentry->kopadr, (int (*)(CSOUND *, void *))oentry->aopadr);
+        oentry++;
     }
     return status;
 }
