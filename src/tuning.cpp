@@ -4,6 +4,7 @@ Csound opcodes for microtonal tunings.
 
     * scalatuning: loads tunings from scl and kbm files
     * mtsesp_notetofrequency: queries tunings with MTS-ESP
+    * mtsesp_retuninginsemitones: queries tunings with MTS-ESP
 
 */
 #include <string>
@@ -62,7 +63,14 @@ int mtsesp_notetofrequency(CSOUND *csound, MTSESP_NOTETOFREQUENCY *p)
     return OK;
 }
 
-#define N_OPS 3
+int mtsesp_retuninginsemitones(CSOUND *csound, MTSESP_NOTETOFREQUENCY *p)
+{
+    MTSClient *client = get_mtsesp_client(csound);
+    *p->out = MTS_RetuningInSemitones(client, *p->in1, *p->in2);
+    return OK;
+}
+
+#define N_OPS 5
 
 static OENTRY localops[N_OPS] = {
     {"scalatuning", sizeof(SCALATUNING), 0, 1, "i[]", "SS", (SUBR)scalatuning, NULL},
@@ -70,6 +78,10 @@ static OENTRY localops[N_OPS] = {
      (SUBR)mtsesp_notetofrequency, NULL},
     {"mtsesp_notetofrequency", sizeof(MTSESP_NOTETOFREQUENCY), 0, 2, "k", "ko", NULL,
      (SUBR)mtsesp_notetofrequency},
+    {"mtsesp_retuninginsemitones", sizeof(MTSESP_NOTETOFREQUENCY), 0, 1, "i", "io",
+     (SUBR)mtsesp_retuninginsemitones, NULL},
+    {"mtsesp_retuninginsemitones", sizeof(MTSESP_NOTETOFREQUENCY), 0, 2, "k", "ko", NULL,
+     (SUBR)mtsesp_retuninginsemitones},
 };
 
 PUBLIC int csoundModuleCreate(CSOUND *csound)
